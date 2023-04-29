@@ -2,7 +2,7 @@
   "name": "recipe-list",
   "version": "0.0.1",
   "description": "A Recipe List",
-  "productName": "Recipes",
+  "productName": "Yan's Recipes",
   "author": "Yan Ngo <57730149+pyngo05@users.noreply.github.com>",
   "private": true,
   "scripts": {

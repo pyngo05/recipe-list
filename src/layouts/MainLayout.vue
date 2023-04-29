@@ -5,10 +5,27 @@
         <q-toolbar-title> Yan's Recipes </q-toolbar-title>
 
         <q-space />
-
+        <span class="q-pr-lg">
+          <q-btn
+            color="light-green-8"
+            icon="add"
+            label="Add"
+            dense
+            @click="alert = true"
+          />
+        </span>
+        <q-btn
+          color="light-green-8"
+          icon="star"
+          label="Favourites"
+          dense
+          @click="filterFavourites()"
+        />
         <q-input
           dark
           dense
+          outlined
+          rounded
           standout
           v-model="searchTerm"
           input-class="text-right"
@@ -31,22 +48,28 @@
     </q-header>
 
     <q-page-container>
-      <router-view />
+      <RecipeCard :filtered-favourites="filteredFavourites" />
+      <!-- <router-view /> -->
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
+import RecipeCard from "components/RecipeCard.vue";
 
 export default defineComponent({
   name: "MainLayout",
 
-  components: {},
+  components: {
+    RecipeCard,
+  },
 
-  setup() {
+  data() {
     return {
       searchTerm: null,
+      alert: false,
+      filteredFavourites: true,
     };
   },
   methods: {
@@ -56,6 +79,12 @@ export default defineComponent({
     showSearchResults() {
       //
     },
+    filterFavourites() {
+      this.filteredFavourites = !this.filteredFavourites;
+      console.log("filteredFavourites", this.filteredFavourites);
+    },
   },
 });
 </script>
+
+<style lang="scss" scoped></style>
