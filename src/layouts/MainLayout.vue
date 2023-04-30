@@ -5,20 +5,11 @@
         <q-toolbar-title> Yan's Recipes </q-toolbar-title>
 
         <q-space />
-        <span class="q-pr-lg">
-          <q-btn
-            color="light-green-8"
-            icon="add"
-            label="Add"
-            dense
-            @click="alert = true"
-          />
-        </span>
-        <q-btn
+        <q-toggle
           color="light-green-8"
           icon="star"
           label="Favourites"
-          dense
+          :model-value="filteredFavourites"
           @click="filterFavourites()"
         />
         <q-input
@@ -48,7 +39,21 @@
     </q-header>
 
     <q-page-container>
-      <RecipeCard :filtered-favourites="filteredFavourites" />
+      <div class="row q-pa-lg">
+        <q-btn
+          class="offset-11 col-1"
+          color="light-green-8"
+          icon="add"
+          label="Add Recipe"
+          dense
+          @click="alert = true"
+        />
+      </div>
+      <RecipeCards
+        :filtered-favourites="filteredFavourites"
+        :search-filtered="searchFiltered"
+        :search-term="searchTerm"
+      />
       <!-- <router-view /> -->
     </q-page-container>
   </q-layout>
@@ -56,32 +61,33 @@
 
 <script>
 import { defineComponent } from "vue";
-import RecipeCard from "components/RecipeCard.vue";
+import RecipeCards from "components/RecipeCards.vue";
 
 export default defineComponent({
   name: "MainLayout",
 
   components: {
-    RecipeCard,
+    RecipeCards,
   },
 
   data() {
     return {
-      searchTerm: null,
+      searchTerm: '',
       alert: false,
-      filteredFavourites: true,
+      filteredFavourites: false,
+      searchFiltered: false,
     };
   },
   methods: {
     termSearched(term) {
       this.searchTerm = term;
+      console.log("this.searchTerm", this.searchTerm);
     },
     showSearchResults() {
-      //
+      this.searchFiltered = !this.searchFiltered;
     },
     filterFavourites() {
       this.filteredFavourites = !this.filteredFavourites;
-      console.log("filteredFavourites", this.filteredFavourites);
     },
   },
 });
