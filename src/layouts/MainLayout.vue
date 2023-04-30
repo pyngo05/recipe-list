@@ -23,7 +23,6 @@
           class="q-ml-md"
           label="Search..."
           @update:model-value="termSearched($event)"
-          @keyup.enter="showSearchResults"
         >
           <template v-slot:append>
             <q-icon v-if="searchTerm === ''" name="search" />
@@ -72,7 +71,7 @@ export default defineComponent({
 
   data() {
     return {
-      searchTerm: '',
+      searchTerm: "",
       alert: false,
       filteredFavourites: false,
       searchFiltered: false,
@@ -81,10 +80,6 @@ export default defineComponent({
   methods: {
     termSearched(term) {
       this.searchTerm = term;
-      console.log("this.searchTerm", this.searchTerm);
-    },
-    showSearchResults() {
-      this.searchFiltered = !this.searchFiltered;
     },
     filterFavourites() {
       this.filteredFavourites = !this.filteredFavourites;

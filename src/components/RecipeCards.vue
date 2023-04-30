@@ -21,13 +21,9 @@ export default defineComponent({
     searchFiltered: Boolean,
     searchTerm: String,
   },
-  watch: {
-    searchFiltered() {
-      console.log("search filtered");
-    },
-  },
   data() {
     return {
+      // a favourite rating of 0 is false, 1 is true
       recipes: [
         {
           id: 1,
@@ -85,7 +81,7 @@ export default defineComponent({
   computed: {
     filteredRecipes() {
       return this.recipes.filter((recipe) => {
-        // exclude non fav
+        // exclude non favourites
         if (this.filteredFavourites && recipe.favourite === 0) {
           return false;
         }
@@ -103,11 +99,11 @@ export default defineComponent({
     },
   },
   methods: {
-    updateFavourites(recipe, rating) {
-      if (this.recipes[recipe.id - 1].favourite === 1) {
-        this.recipes[recipe.id - 1].favourite = 0;
+    updateFavourites(data) {
+      if (this.recipes[data.recipe.id - 1].favourite === 1) {
+        this.recipes[data.recipe.id - 1].favourite = 0;
       } else {
-        this.recipes[recipe.id - 1].favourite = 1;
+        this.recipes[data.recipe.id - 1].favourite = 1;
       }
     },
   },
