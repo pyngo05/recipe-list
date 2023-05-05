@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card cursor-pointer" flat bordered>
+  <q-card class="recipe-card cursor-pointer" flat bordered>
     <q-img class="img" :src="recipe.image">
       <q-rating
         class="rating"
@@ -27,8 +27,8 @@
       >
         {{ recipe.level }}
       </div>
-      <div class="text-h5 q-mt-sm q-mb-xs">{{ recipe.name }}</div>
-      <div class="text-caption text-grey">
+      <div class="text-h5 q-mt-sm q-mb-xs ellipsis">{{ recipe.name }}</div>
+      <div class="text-caption text-grey ellipsis-3-lines">
         {{ recipe.description }}
       </div>
     </q-card-section>
@@ -53,14 +53,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.my-card {
+.recipe-card {
   width: 100%;
   max-width: 250px;
+  min-height: 470px;
 }
 .rating {
   background-color: transparent;
 }
 .img {
-  border-radius: 50%;
+  width: 248px;
+  height: 300px;
+  object-fit: cover;
 }
 </style>

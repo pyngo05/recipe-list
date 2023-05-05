@@ -45,13 +45,14 @@
           icon="add"
           label="Add Recipe"
           dense
-          @click="alert = true"
+          @click="openAddRecipeDialog()"
         />
       </div>
       <RecipeCards
         :filtered-favourites="filteredFavourites"
         :search-filtered="searchFiltered"
         :search-term="searchTerm"
+        :new-recipe="newRecipe"
       />
       <!-- <router-view /> -->
     </q-page-container>
@@ -61,6 +62,7 @@
 <script>
 import { defineComponent } from "vue";
 import RecipeCards from "components/RecipeCards.vue";
+import AddRecipeDialog from "components/AddRecipeDialog.vue";
 
 export default defineComponent({
   name: "MainLayout",
@@ -72,9 +74,9 @@ export default defineComponent({
   data() {
     return {
       searchTerm: "",
-      alert: false,
       filteredFavourites: false,
       searchFiltered: false,
+      newRecipe: {},
     };
   },
   methods: {
@@ -83,6 +85,16 @@ export default defineComponent({
     },
     filterFavourites() {
       this.filteredFavourites = !this.filteredFavourites;
+    },
+    openAddRecipeDialog() {
+      this.$q
+        .dialog({
+          component: AddRecipeDialog,
+          componentProps: {},
+        })
+        .onOk((data) => {
+          this.newRecipe = data;
+        });
     },
   },
 });
