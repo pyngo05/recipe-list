@@ -1,5 +1,10 @@
 <template>
-  <q-card class="recipe-card cursor-pointer" flat bordered>
+  <q-card
+    class="recipe-card cursor-pointer"
+    flat
+    bordered
+    @click="openRecipeInstructionsDialog(recipe)"
+  >
     <q-img class="img" :src="recipe.image">
       <q-rating
         class="rating"
@@ -10,6 +15,7 @@
         icon="star_border"
         icon-selected="star"
         no-dimming
+        @click.stop
         @update:model-value="emitUpdateFavourites(recipe, $event)"
       ></q-rating>
     </q-img>
@@ -37,6 +43,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import RecipeInstructionsDialog from "components/RecipeInstructionsDialog.vue";
 
 export default defineComponent({
   name: "RecipeCard",
@@ -47,6 +54,17 @@ export default defineComponent({
   methods: {
     emitUpdateFavourites(recipe, rating) {
       this.$emit("favouriteUpdated", { recipe, rating });
+    },
+
+    openRecipeInstructionsDialog(recipe) {
+      console.log("recipe before", recipe);
+      this.$q.dialog({
+        component: RecipeInstructionsDialog,
+        componentProps: { recipe },
+      });
+    },
+    logEvent($event) {
+      console.log("$event", $event);
     },
   },
 });

@@ -40,7 +40,31 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1598142982901-df6cec10ae35?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
           favourite: 0,
-          instuctions: "",
+          servingSize: "30 Cheese Rolls",
+          prepTime: "10 Mins",
+          cookTime: "20 Mins",
+          totalTime: "30 Mins",
+          instructions: [
+            "Preheat oven to 400F degrees with a rack in the middle.",
+            "Combine the milk, water, oil and salt in a saucepan and bring to a boil over medium high heat.",
+            "Add the tapioca flour to the bowl of a stand mixer and, once the milk mixture boils, pour it over the flour. Turn the mixer on and mix it well. The texture will be fondant-like, really white and sticky.",
+            "With the mixer still on, add the eggs, one at a time. You will think they won't mix, since the tapioca flour mixture is so sticky, but hang in there cause they will.",
+            "Once the eggs are incorporated, add the cheese, a little at a time, until fully incorporated.",
+            "The dough is supposed to be soft and sticky. However, if you're worried it's too liquidy, add some more tapioca flour. Just don't over do it or your cheese bread will be tough and not too gooey.",
+            "To shape the balls, wet your hands with cold water and, using a spoon, scoop some of the dough to shape balls that are a little smaller than golf-sized.",
+            "Place the balls on a baking sheet covered with parchment paper and bring it to the preheat oven.",
+            "Bake for 15-20 minutes or until they are golden and puffed.",
+          ],
+          ingredients: [
+            "4 cups tapioca flour",
+            "1 1/4 cups milk",
+            "1/2 cup water",
+            "6 tablespoons oil",
+            "1 1/2 cups grated parmesan cheese",
+            "1 cups shredded Mozzarella cheese",
+            "2 large eggs",
+            "2 teaspoons salt",
+          ],
         },
         {
           id: 2,
@@ -51,7 +75,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1643887259964-866f4b1076d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
           favourite: 0,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
         {
           id: 3,
@@ -62,7 +87,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1630953899906-d16511a72558?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1615&q=80",
           favourite: 0,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
         {
           id: 4,
@@ -73,7 +99,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1639321905636-c1c0e71fb467?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1548&q=80",
           favourite: 0,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
         {
           id: 5,
@@ -84,7 +111,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1630859288268-d11728472a25?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80",
           favourite: 1,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
         {
           id: 6,
@@ -95,7 +123,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
           favourite: 1,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
         {
           id: 7,
@@ -106,7 +135,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1627308594190-a057cd4bfac8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80",
           favourite: 1,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
         {
           id: 8,
@@ -117,7 +147,8 @@ export default defineComponent({
           image:
             "https://images.unsplash.com/photo-1629180050285-7c56c6671f19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=385&q=80",
           favourite: 0,
-          instuctions: "",
+          instructions: "",
+          ingredients: [],
         },
       ],
     };

@@ -54,7 +54,6 @@
         :search-term="searchTerm"
         :new-recipe="newRecipe"
       />
-      <!-- <router-view /> -->
     </q-page-container>
   </q-layout>
 </template>
@@ -83,9 +82,11 @@ export default defineComponent({
     termSearched(term) {
       this.searchTerm = term;
     },
+
     filterFavourites() {
       this.filteredFavourites = !this.filteredFavourites;
     },
+
     openAddRecipeDialog() {
       this.$q
         .dialog({

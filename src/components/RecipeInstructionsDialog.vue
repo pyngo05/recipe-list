@@ -1,16 +1,82 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide">
+  <q-dialog ref="dialog" @hide="onDialogHide" full-width full-height>
     <q-card class="q-dialog-plugin">
-      <!--
-        ...content
-        ... use q-card-section for it?
-      -->
+      <div class="column items-center q-pa-lg">
+        <q-img class="img" :src="recipe.image">
+          <q-rating
+            class="rating"
+            :model-value="recipe.favourite"
+            max="1"
+            size="sm"
+            color="yellow"
+            icon="star_border"
+            icon-selected="star"
+            no-dimming
+            @update:model-value="updateFavourites(recipe, $event)"
+          ></q-rating>
+        </q-img>
 
-      <!-- buttons example -->
-      <q-card-actions align="right">
-        <q-btn color="primary" label="OK" @click="onOKClick" />
-        <q-btn color="primary" label="Cancel" @click="onCancelClick" />
-      </q-card-actions>
+        <div class="text-h5 q-mt-sm q-mb-xs">
+          {{ recipe.name }}
+          <q-chip
+            dense
+            :color="
+              recipe.level === 'Easy'
+                ? 'positive'
+                : recipe.level === 'Medium'
+                ? 'warning'
+                : 'negative'
+            "
+            text-color="white"
+          >
+            {{ recipe.level }}
+          </q-chip>
+        </div>
+
+        <div class="text-caption text-grey description">
+          {{ recipe.description }}
+        </div>
+
+        <div class="row q-pt-md">
+          <q-chip dense outline color="primary" icon="restaurant">
+            {{ "Serves: " + recipe.servingSize }}
+          </q-chip>
+          <q-chip dense outline color="primary">
+            {{ "Prep time: " + recipe.prepTime }}
+          </q-chip>
+          <q-chip dense outline color="primary">
+            {{ "Cook time: " + recipe.cookTime }}
+          </q-chip>
+          <q-chip dense outline color="primary" icon="timer">
+            {{ "Total time: " + recipe.totalTime }}
+          </q-chip>
+        </div>
+
+        <div class="row">
+          <span class="q-pt-lg offset-3 col-3">
+            {{ "Ingredients:" }}
+            <ul v-for="(ingredient, index) in recipe.ingredients" :key="index">
+              <li>{{ ingredient }}</li>
+            </ul>
+          </span>
+
+          <span class="q-pt-lg col-4">
+            {{ "Instructions:" }}
+            <ol>
+              <li
+                class="q-pb-md"
+                v-for="(instruction, index) in recipe.instructions"
+                :key="index"
+              >
+                {{ instruction }}
+              </li>
+            </ol>
+          </span>
+        </div>
+        <q-card-actions align="right">
+          <q-btn color="primary" label="Close" @click="onOKClick" />
+        </q-card-actions>
+      </div>
     </q-card>
   </q-dialog>
 </template>
@@ -19,49 +85,64 @@
 export default {
   name: "RecipeInstructionsDialog",
   props: {
-    // ...your custom props
+    recipe: Object,
   },
-
-  emits: [
-    // REQUIRED
-    "ok",
-    "hide",
-  ],
-
+  data() {
+    return {
+      favouritesUpdated: false,
+      update: null,
+    };
+  },
+  emits: ["ok", "hide"],
   methods: {
-    // following method is REQUIRED
-    // (don't change its name --> "show")
     show() {
       this.$refs.dialog.show();
     },
 
-    // following method is REQUIRED
-    // (don't change its name --> "hide")
     hide() {
       this.$refs.dialog.hide();
     },
 
     onDialogHide() {
-      // required to be emitted
-      // when QDialog emits "hide" event
       this.$emit("hide");
     },
 
     onOKClick() {
-      // on OK, it is REQUIRED to
-      // emit "ok" event (with optional payload)
-      // before hiding the QDialog
-      this.$emit("ok");
-      // or with payload: this.$emit('ok', { ... })
-
-      // then hiding dialog
+      if (this.favouritesUpdated === true) {
+        this.$emit("ok", {
+          recipe: this.update.recipe,
+          rating: this.update.rating,
+        });
+      } else {
+        this.$emit("ok");
+      }
+      this.favouritesUpdated = false;
       this.hide();
     },
 
-    onCancelClick() {
-      // we just need to hide the dialog
-      this.hide();
+    updateFavourites(recipe, rating) {
+      this.favouritesUpdated = true;
+      this.update = { recipe, rating };
+      recipe.favourite === 1 ? (recipe.favourite = 0) : (recipe.favourite = 1);
     },
   },
 };
 </script>
+<style lang="scss" scoped>
+.recipe-card {
+  width: 100%;
+  max-width: 250px;
+  min-height: 470px;
+}
+.rating {
+  background-color: transparent;
+}
+.img {
+  width: 596px;
+  height: 400px;
+  object-fit: cover;
+}
+.description {
+  font-size: 14px;
+}
+</style>
