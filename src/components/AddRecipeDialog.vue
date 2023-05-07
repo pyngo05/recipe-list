@@ -1,26 +1,21 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide" full-width full-height>
     <q-card class="q-dialog-plugin">
-      <q-form @submit="onOKClick" class="q-gutter-md" ref="form">
+      <q-form @submit="onOKClick" class="row" ref="form">
         <q-input
-          class="q-pa-md"
+          class="q-pa-md col-5"
           filled
           v-model="name"
           label="Recipe Name"
           lazy-rules
+          dense
           :rules="[(val) => (val && val.length > 0) || 'Please type something']"
         />
-        <q-input
-          class="q-pa-md"
-          filled
-          v-model="image"
-          label="Image URL"
-          lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-        />
+
         <q-select
-          class="q-pa-md"
+          class="q-pa-md offset-2 col-5"
           filled
+          dense
           v-model="level"
           :options="options"
           label="Level"
@@ -28,8 +23,90 @@
         />
 
         <q-input
-          class="q-pa-md"
+          class="q-pa-md col-3"
+          dense
           filled
+          v-model="servingSize"
+          label="Serving Size"
+          lazy-rules
+          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        />
+
+        <q-input
+          class="q-pa-md col-3"
+          filled
+          v-model="prepTime"
+          label="Prep Time"
+          dense
+          lazy-rules
+          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        />
+
+        <q-input
+          class="q-pa-md col-3"
+          filled
+          v-model="cookTime"
+          label="Cook Time"
+          lazy-rules
+          dense
+          :rules="[
+            (val) =>
+              (val && val.length > 0) ||
+              'Please type something or enter \'None\'',
+          ]"
+        />
+
+        <q-input
+          class="q-pa-md col-3"
+          filled
+          v-model="totalTime"
+          dense
+          label="Total Time"
+          lazy-rules
+          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        />
+
+        <q-input
+          class="q-pa-md col-12"
+          filled
+          dense
+          :model-value="ingredientEntered"
+          label="Ingredients"
+          lazy-rules
+          @update:model-value="ingredientToAdd($event)"
+          @keyup.enter="addToIngredients($event)"
+          :rules="[
+            () => this.ingredients.length > 0 || 'Please type something',
+          ]"
+        >
+          <q-chip
+            v-for="(ingredient, index) in ingredients"
+            :key="index"
+            dense
+            removable
+            :model-value="ingredient ? true : false"
+            @remove="removeIngredient(ingredient)"
+            color="primary"
+            text-color="white"
+          >
+            {{ ingredient }}
+          </q-chip>
+        </q-input>
+
+        <q-input
+          class="q-pa-md col-12"
+          filled
+          v-model="image"
+          dense
+          label="Image URL"
+          lazy-rules
+          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        />
+
+        <q-input
+          class="q-pa-md col-12"
+          filled
+          dense
           v-model="description"
           label="Description"
           type="textarea"
@@ -37,19 +114,38 @@
           :rules="[(val) => (val && val.length > 0) || 'Please type something']"
         />
 
-        <q-input
-          class="q-pa-md"
-          filled
-          v-model="instructions"
-          label="Instructions"
-          type="textarea"
-          lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-        />
+        <div class="q-pa-md col-12 text-subtitle1">Instructions:</div>
+        <div
+          class="col-12 row"
+          v-for="(instruction, index) in instructions"
+          :key="index"
+        >
+          <q-input
+            class="q-pa-md col-10"
+            filled
+            dense
+            v-model="instructions[index]"
+            :label="`Step ${(index += 1)}:`"
+            type="textarea"
+            lazy-rules
+            :rules="[
+              (val) => (val && val.length > 0) || 'Please type something',
+            ]"
+          />
+        </div>
 
-        <q-toggle v-model="favourite" label="Add to favourites" />
+        <div class="q-pa-md col-12">
+          <q-btn
+            dense
+            color="primary"
+            label="Add more steps"
+            @click="addStep()"
+          />
+        </div>
+
+        <q-toggle class="col-1" v-model="favourite" label="Add to favourites" />
       </q-form>
-      <q-card-actions align="right">
+      <q-card-actions class="q-pt-xl" align="right">
         <q-btn color="primary" label="OK" @click="onOKClick" type="submit" />
         <q-btn color="primary" label="Cancel" @click="onCancelClick" />
       </q-card-actions>
@@ -66,12 +162,22 @@ export default {
     return {
       name: null,
       description: null,
-      instructions: null,
+      instructions: ["", "", "", "", ""],
       favourite: false,
       level: null,
       image: null,
       options: ["Easy", "Medium", "Hard"],
+      ingredients: [],
+      servingSize: null,
+      prepTime: null,
+      cookTime: null,
+      totalTime: null,
+      ingredient: null,
+      ingredientEntered: "",
     };
+  },
+  mounted() {
+    console.log("this.instructions", this.instructions);
   },
   methods: {
     show() {
@@ -96,6 +202,11 @@ export default {
             favourite: this.favourite === false ? 0 : 1,
             level: this.level,
             image: this.image,
+            ingredients: this.ingredients,
+            servingSize: this.servingSize,
+            prepTime: this.prepTime,
+            cookTime: this.cookTime,
+            totalTime: this.totalTime,
           });
           this.hide();
           this.$q.notify({
@@ -115,6 +226,30 @@ export default {
 
     onCancelClick() {
       this.hide();
+    },
+
+    addStep() {
+      console.log("to add step");
+      this.instructions.push("");
+      console.log("this.instructions", this.instructions);
+    },
+
+    removeIngredient(ingredient) {
+      this.ingredients = this.ingredients.filter((item) => {
+        return item !== ingredient;
+      });
+      console.log("ingredient to remove", ingredient);
+      console.log("this.ingredients", this.ingredients);
+    },
+
+    addToIngredients(ingredient) {
+      console.log("this.ingredients", this.ingredients);
+      this.ingredients.push(this.ingredient);
+      this.ingredientEntered = "";
+    },
+    ingredientToAdd(ingredient) {
+      this.ingredient = ingredient;
+      this.ingredientEntered = ingredient;
     },
   },
 };
