@@ -45,7 +45,7 @@
           icon="add"
           label="Add Recipe"
           dense
-          @click="openAddRecipeDialog()"
+          @click="openAddEditRecipeDialog({})"
         />
       </div>
       <RecipeCards
@@ -53,6 +53,7 @@
         :search-filtered="searchFiltered"
         :search-term="searchTerm"
         :new-recipe="newRecipe"
+        @edit-recipe="editRecipe"
       />
     </q-page-container>
   </q-layout>
@@ -61,7 +62,7 @@
 <script>
 import { defineComponent } from "vue";
 import RecipeCards from "components/RecipeCards.vue";
-import AddRecipeDialog from "components/AddRecipeDialog.vue";
+import AddEditRecipeDialog from "components/AddEditRecipeDialog.vue";
 
 export default defineComponent({
   name: "MainLayout",
@@ -87,15 +88,18 @@ export default defineComponent({
       this.filteredFavourites = !this.filteredFavourites;
     },
 
-    openAddRecipeDialog() {
+    openAddEditRecipeDialog(recipe) {
       this.$q
         .dialog({
-          component: AddRecipeDialog,
-          componentProps: {},
+          component: AddEditRecipeDialog,
+          componentProps: { recipe },
         })
         .onOk((data) => {
           this.newRecipe = data;
         });
+    },
+    editRecipe(recipe) {
+      this.openAddEditRecipeDialog(recipe);
     },
   },
 });

@@ -47,7 +47,7 @@ import RecipeInstructionsDialog from "components/RecipeInstructionsDialog.vue";
 
 export default defineComponent({
   name: "RecipeCard",
-  emits: ["favouriteUpdated"],
+  emits: ["favouriteUpdated", "deleteRecipe", "editRecipe"],
   props: {
     recipe: Object,
   },
@@ -57,14 +57,16 @@ export default defineComponent({
     },
 
     openRecipeInstructionsDialog(recipe) {
-      console.log("recipe before", recipe);
-      this.$q.dialog({
-        component: RecipeInstructionsDialog,
-        componentProps: { recipe },
-      });
-    },
-    logEvent($event) {
-      console.log("$event", $event);
+      this.$q
+        .dialog({
+          component: RecipeInstructionsDialog,
+          componentProps: { recipe },
+        })
+        .onOk((data) => {
+          if (data.recipeToDelete)
+            this.$emit("deleteRecipe", data.recipeToDelete);
+          if (data.recipeToEdit) this.$emit("editRecipe", data.recipeToEdit);
+        });
     },
   },
 });

@@ -1,6 +1,19 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide" full-width full-height>
     <q-card class="q-dialog-plugin">
+      <q-card-actions align="right">
+        <q-btn
+          color="primary"
+          label="Edit"
+          icon="edit"
+          @click="onEditRecipeClick(recipe)"
+        />
+        <q-btn
+          color="primary"
+          label="Delete"
+          @click="onDeleteRecipeClick(recipe)"
+        />
+      </q-card-actions>
       <div class="column items-center q-pa-lg">
         <q-img class="img" :src="recipe.image">
           <q-rating
@@ -37,7 +50,7 @@
           {{ recipe.description }}
         </div>
 
-        <div class="row q-pt-md">
+        <div class="row q-pt-md q-pb-md">
           <q-chip dense outline color="primary" icon="restaurant">
             {{ "Serves: " + recipe.servingSize }}
           </q-chip>
@@ -52,15 +65,15 @@
           </q-chip>
         </div>
 
-        <div class="row">
-          <span class="q-pt-lg offset-3 col-3">
+        <div class="row justify-center">
+          <span class="q-pr-xl col-4 q-pt-md">
             {{ "Ingredients:" }}
             <ul v-for="(ingredient, index) in recipe.ingredients" :key="index">
               <li>{{ ingredient }}</li>
             </ul>
           </span>
 
-          <span class="q-pt-lg col-4">
+          <span class="q-pl-xl col-4 q-pt-md">
             {{ "Instructions:" }}
             <ol>
               <li
@@ -93,7 +106,7 @@ export default {
       update: null,
     };
   },
-  emits: ["ok", "hide"],
+  emits: ["ok", "hide", "delete"],
   methods: {
     show() {
       this.$refs.dialog.show();
@@ -124,6 +137,27 @@ export default {
       this.favouritesUpdated = true;
       this.update = { recipe, rating };
       recipe.favourite === 1 ? (recipe.favourite = 0) : (recipe.favourite = 1);
+    },
+
+    onDeleteRecipeClick(recipe) {
+      this.$q
+        .dialog({
+          title: "Delete Recipe",
+          message: `Are you sure you would like to delete ${recipe.name}?`,
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          this.$emit("ok", { recipeToDelete: recipe });
+          this.hide();
+        })
+        .onCancel(() => {
+          this.hide();
+        });
+    },
+
+    onEditRecipeClick(recipe) {
+      this.$emit("ok", { recipeToEdit: recipe });
     },
   },
 };

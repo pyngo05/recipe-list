@@ -121,13 +121,15 @@
           :key="index"
         >
           <q-input
-            class="q-pa-md col-10"
+            class="q-pa-md col-12"
             filled
             dense
             v-model="instructions[index]"
-            :label="`Step ${(index += 1)}:`"
+            :label="`Step ${index + 1}:`"
             type="textarea"
             lazy-rules
+            @update:model-value="instructionToAdd($event, index)"
+            @keyup.enter="addToInstructions($event)"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
             ]"
@@ -155,8 +157,10 @@
 
 <script>
 export default {
-  name: "AddRecipeDialog",
-  props: {},
+  name: "AddEditRecipeDialog",
+  props: {
+    recipe: Object,
+  },
   emits: ["ok", "hide"],
   data() {
     return {
@@ -174,10 +178,16 @@ export default {
       totalTime: null,
       ingredient: null,
       ingredientEntered: "",
+      instruction: null,
+      instructionEntered: "",
     };
   },
   mounted() {
-    console.log("this.instructions", this.instructions);
+    if (this.recipe.id) {
+      console.log("recipe present", this.recipe);
+    } else {
+      console.log("recipe not present", this.recipe);
+    }
   },
   methods: {
     show() {
@@ -229,27 +239,30 @@ export default {
     },
 
     addStep() {
-      console.log("to add step");
       this.instructions.push("");
-      console.log("this.instructions", this.instructions);
     },
 
     removeIngredient(ingredient) {
       this.ingredients = this.ingredients.filter((item) => {
         return item !== ingredient;
       });
-      console.log("ingredient to remove", ingredient);
-      console.log("this.ingredients", this.ingredients);
     },
 
     addToIngredients(ingredient) {
-      console.log("this.ingredients", this.ingredients);
       this.ingredients.push(this.ingredient);
       this.ingredientEntered = "";
     },
     ingredientToAdd(ingredient) {
       this.ingredient = ingredient;
       this.ingredientEntered = ingredient;
+    },
+    instructionToAdd(instruction, index) {
+      this.instruction = instruction;
+      this.instructionEntered = instruction;
+    },
+    addToInstructions(instruction) {
+      this.instructions.push(this.ingredient);
+      // this.instructionEntered = "";
     },
   },
 };

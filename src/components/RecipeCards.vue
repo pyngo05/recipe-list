@@ -4,6 +4,8 @@
       <recipe-card
         :recipe="recipe"
         @favouriteUpdated="updateFavourites"
+        @delete-recipe="deleteRecipe"
+        @edit-recipe="editRecipe"
       ></recipe-card>
     </div>
   </div>
@@ -16,6 +18,7 @@ import RecipeCard from "./RecipeCard.vue";
 export default defineComponent({
   name: "RecipeCards",
   components: { RecipeCard },
+  emits: ["editRecipe"],
   props: {
     filteredFavourites: Boolean,
     searchTerm: String,
@@ -328,6 +331,14 @@ export default defineComponent({
       } else {
         this.recipes[data.recipe.id - 1].favourite = 1;
       }
+    },
+    deleteRecipe(recipeToDelete) {
+      this.recipes = this.recipes.filter((recipe) => {
+        return recipe.id !== recipeToDelete.id;
+      });
+    },
+    editRecipe(recipe) {
+      this.$emit("editRecipe", recipe);
     },
   },
 });
