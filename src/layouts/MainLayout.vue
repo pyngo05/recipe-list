@@ -53,6 +53,7 @@
         :search-filtered="searchFiltered"
         :search-term="searchTerm"
         :new-recipe="newRecipe"
+        :edited-recipe="editedRecipe"
         @edit-recipe="editRecipe"
       />
     </q-page-container>
@@ -77,6 +78,7 @@ export default defineComponent({
       filteredFavourites: false,
       searchFiltered: false,
       newRecipe: {},
+      editedRecipe: {},
     };
   },
   methods: {
@@ -95,7 +97,9 @@ export default defineComponent({
           componentProps: { recipe },
         })
         .onOk((data) => {
-          this.newRecipe = data;
+          data.newRecipe && data.newRecipe === true
+            ? (this.newRecipe = data)
+            : (this.editedRecipe = data);
         });
     },
     editRecipe(recipe) {

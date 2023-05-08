@@ -63,9 +63,9 @@ export default defineComponent({
           componentProps: { recipe },
         })
         .onOk((data) => {
-          if (data.recipeToDelete)
+          if (data?.recipeToDelete)
             this.$emit("deleteRecipe", data.recipeToDelete);
-          if (data.recipeToEdit) this.$emit("editRecipe", data.recipeToEdit);
+          if (data?.recipeToEdit) this.$emit("editRecipe", data.recipeToEdit);
         });
     },
   },

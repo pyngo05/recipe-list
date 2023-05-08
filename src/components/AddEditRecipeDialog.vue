@@ -1,14 +1,26 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide" full-width full-height>
     <q-card class="q-dialog-plugin">
+      <div
+        v-if="!editedRecipe.name"
+        class="text-h4 q-pa-lg text-center text-primary text-bold"
+      >
+        Add Recipe
+      </div>
+      <div v-else class="text-h4 text-center q-pa-lg text-primary text-bold">
+        Edit Recipe
+      </div>
       <q-form @submit="onOKClick" class="row" ref="form">
         <q-input
           class="q-pa-md col-5"
           filled
-          v-model="name"
+          :model-value="editedRecipe.name ? editedRecipe.name : name"
           label="Recipe Name"
           lazy-rules
           dense
+          @update:model-value="
+            editedRecipe.name ? (editedRecipe.name = $event) : (name = $event)
+          "
           :rules="[(val) => (val && val.length > 0) || 'Please type something']"
         />
 
@@ -16,7 +28,12 @@
           class="q-pa-md offset-2 col-5"
           filled
           dense
-          v-model="level"
+          :model-value="editedRecipe.level ? editedRecipe.level : level"
+          @update:model-value="
+            editedRecipe.level
+              ? (editedRecipe.level = $event)
+              : (level = $event)
+          "
           :options="options"
           label="Level"
           :rules="[(val) => val !== null || 'Please select level']"
@@ -26,7 +43,14 @@
           class="q-pa-md col-3"
           dense
           filled
-          v-model="servingSize"
+          :model-value="
+            editedRecipe.servingSize ? editedRecipe.servingSize : servingSize
+          "
+          @update:model-value="
+            editedRecipe.servingSize
+              ? (editedRecipe.servingSize = $event)
+              : (servingSize = $event)
+          "
           label="Serving Size"
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || 'Please type something']"
@@ -35,7 +59,14 @@
         <q-input
           class="q-pa-md col-3"
           filled
-          v-model="prepTime"
+          :model-value="
+            editedRecipe.prepTime ? editedRecipe.prepTime : prepTime
+          "
+          @update:model-value="
+            editedRecipe.prepTime
+              ? (editedRecipe.prepTime = $event)
+              : (prepTime = $event)
+          "
           label="Prep Time"
           dense
           lazy-rules
@@ -45,7 +76,14 @@
         <q-input
           class="q-pa-md col-3"
           filled
-          v-model="cookTime"
+          :model-value="
+            editedRecipe.cookTime ? editedRecipe.cookTime : cookTime
+          "
+          @update:model-value="
+            editedRecipe.cookTime
+              ? (editedRecipe.cookTime = $event)
+              : (cookTime = $event)
+          "
           label="Cook Time"
           lazy-rules
           dense
@@ -59,7 +97,14 @@
         <q-input
           class="q-pa-md col-3"
           filled
-          v-model="totalTime"
+          :model-value="
+            editedRecipe.totalTime ? editedRecipe.totalTime : totalTime
+          "
+          @update:model-value="
+            editedRecipe.totalTime
+              ? (editedRecipe.totalTime = $event)
+              : (totalTime = $event)
+          "
           dense
           label="Total Time"
           lazy-rules
@@ -67,36 +112,65 @@
         />
 
         <q-input
-          class="q-pa-md col-12"
+          class="q-pa-md q-pt-none col-12"
           filled
+          type="textarea"
           dense
-          :model-value="ingredientEntered"
-          label="Ingredients"
+          :model-value="
+            editedRecipe.ingredientEntered
+              ? editedRecipe.ingredientEntered
+              : ingredientEntered
+          "
+          label="Ingredients - press enter to add each ingredient...*"
           lazy-rules
           @update:model-value="ingredientToAdd($event)"
           @keyup.enter="addToIngredients($event)"
           :rules="[
-            () => this.ingredients.length > 0 || 'Please type something',
+            () =>
+              this.ingredients.length > 0 ||
+              this.editedRecipe.ingredients.length > 0 ||
+              'Please press enter after each ingredient input',
           ]"
         >
-          <q-chip
-            v-for="(ingredient, index) in ingredients"
-            :key="index"
-            dense
-            removable
-            :model-value="ingredient ? true : false"
-            @remove="removeIngredient(ingredient)"
-            color="primary"
-            text-color="white"
-          >
-            {{ ingredient }}
-          </q-chip>
+          <div v-if="!editedRecipe.ingredients">
+            <q-chip
+              v-for="(ingredient, index) in ingredients"
+              :key="index"
+              dense
+              removable
+              :model-value="ingredient ? true : false"
+              @remove="removeIngredient(ingredient)"
+              color="primary"
+              text-color="white"
+            >
+              {{ ingredient }}
+            </q-chip>
+          </div>
+          <div v-else>
+            <q-chip
+              v-for="(ingredient, index) in editedRecipe.ingredients"
+              :key="index"
+              dense
+              removable
+              :model-value="ingredient ? true : false"
+              @remove="removeIngredient(ingredient)"
+              color="primary"
+              text-color="white"
+            >
+              {{ ingredient }}
+            </q-chip>
+          </div>
         </q-input>
 
         <q-input
           class="q-pa-md col-12"
           filled
-          v-model="image"
+          :model-value="editedRecipe.image ? editedRecipe.image : image"
+          @update:model-value="
+            editedRecipe.image
+              ? (editedRecipe.image = $event)
+              : (image = $event)
+          "
           dense
           label="Image URL"
           lazy-rules
@@ -107,7 +181,14 @@
           class="q-pa-md col-12"
           filled
           dense
-          v-model="description"
+          :model-value="
+            editedRecipe.description ? editedRecipe.description : description
+          "
+          @update:model-value="
+            editedRecipe.description
+              ? (editedRecipe.description = $event)
+              : (description = $event)
+          "
           label="Description"
           type="textarea"
           lazy-rules
@@ -115,27 +196,50 @@
         />
 
         <div class="q-pa-md col-12 text-subtitle1">Instructions:</div>
-        <div
-          class="col-12 row"
-          v-for="(instruction, index) in instructions"
-          :key="index"
-        >
-          <q-input
-            class="q-pa-md col-12"
-            filled
-            dense
-            v-model="instructions[index]"
-            :label="`Step ${index + 1}:`"
-            type="textarea"
-            lazy-rules
-            @update:model-value="instructionToAdd($event, index)"
-            @keyup.enter="addToInstructions($event)"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
-          />
+        <div class="col-12 row" v-if="!editedRecipe.instructions">
+          <div
+            class="col-12 row"
+            v-for="(instruction, index) in instructions"
+            :key="index"
+          >
+            <q-input
+              class="q-pa-md col-12"
+              filled
+              dense
+              v-model="instructions[index]"
+              :label="`Step ${index + 1}:`"
+              type="textarea"
+              lazy-rules
+              @update:model-value="instructionToAdd($event, index)"
+              @keyup.enter="addToInstructions($event)"
+              :rules="[
+                () => instructions.length > 0 || 'Please type something',
+              ]"
+            />
+          </div>
         </div>
-
+        <div class="col-12 row" v-else>
+          <div
+            class="col-12 row"
+            v-for="(instruction, index) in editedRecipe.instructions"
+            :key="index"
+          >
+            <q-input
+              class="q-pa-md col-12"
+              filled
+              dense
+              v-model="editedRecipe.instructions[index]"
+              :label="`Step ${index + 1}:`"
+              type="textarea"
+              lazy-rules
+              @update:model-value="instructionToAdd($event, index)"
+              @keyup.enter="addToInstructions($event)"
+              :rules="[
+                () => instructions.length > 0 || 'Please type something',
+              ]"
+            />
+          </div>
+        </div>
         <div class="q-pa-md col-12">
           <q-btn
             dense
@@ -145,10 +249,25 @@
           />
         </div>
 
-        <q-toggle class="col-1" v-model="favourite" label="Add to favourites" />
+        <q-toggle
+          class="col-1"
+          :model-value="
+            editedRecipe.favourite && editedRecipe.favourite === 1
+              ? true
+              : editedRecipe.favourite && editedRecipe.favourite === 0
+              ? false
+              : favourite
+          "
+          @update:model-value="
+            editedRecipe.favourite
+              ? (editedRecipe.favourite = $event)
+              : (favourite = $event)
+          "
+          label="Add to favourites"
+        />
       </q-form>
       <q-card-actions class="q-pt-xl" align="right">
-        <q-btn color="primary" label="OK" @click="onOKClick" type="submit" />
+        <q-btn color="primary" label="Save" @click="onOKClick" type="submit" />
         <q-btn color="primary" label="Cancel" @click="onCancelClick" />
       </q-card-actions>
     </q-card>
@@ -180,13 +299,13 @@ export default {
       ingredientEntered: "",
       instruction: null,
       instructionEntered: "",
+      editedRecipe: {},
     };
   },
   mounted() {
     if (this.recipe.id) {
-      console.log("recipe present", this.recipe);
+      this.editedRecipe = this.recipe;
     } else {
-      console.log("recipe not present", this.recipe);
     }
   },
   methods: {
@@ -205,19 +324,37 @@ export default {
     onOKClick() {
       this.$refs.form.validate().then((success) => {
         if (success) {
-          this.$emit("ok", {
-            name: this.name,
-            description: this.description,
-            instructions: this.instructions,
-            favourite: this.favourite === false ? 0 : 1,
-            level: this.level,
-            image: this.image,
-            ingredients: this.ingredients,
-            servingSize: this.servingSize,
-            prepTime: this.prepTime,
-            cookTime: this.cookTime,
-            totalTime: this.totalTime,
-          });
+          if (this.editedRecipe.name) {
+            this.$emit("ok", {
+              editedRecipe: true,
+              name: this.editedRecipe.name,
+              description: this.editedRecipe.description,
+              instructions: this.editedRecipe.instructions,
+              favourite: this.editedRecipe.favourite === false ? 0 : 1,
+              level: this.editedRecipe.level,
+              image: this.editedRecipe.image,
+              ingredients: this.editedRecipe.ingredients,
+              servingSize: this.editedRecipe.servingSize,
+              prepTime: this.editedRecipe.prepTime,
+              cookTime: this.editedRecipe.cookTime,
+              totalTime: this.editedRecipe.totalTime,
+            });
+          } else {
+            this.$emit("ok", {
+              newRecipe: true,
+              name: this.name,
+              description: this.description,
+              instructions: this.instructions,
+              favourite: this.favourite === false ? 0 : 1,
+              level: this.level,
+              image: this.image,
+              ingredients: this.ingredients,
+              servingSize: this.servingSize,
+              prepTime: this.prepTime,
+              cookTime: this.cookTime,
+              totalTime: this.totalTime,
+            });
+          }
           this.hide();
           this.$q.notify({
             color: "green-4",
@@ -239,7 +376,11 @@ export default {
     },
 
     addStep() {
-      this.instructions.push("");
+      if (!this.editedRecipe.name) {
+        this.instructions.push("");
+      } else {
+        this.editedRecipe.instructions.push("");
+      }
     },
 
     removeIngredient(ingredient) {
@@ -249,20 +390,24 @@ export default {
     },
 
     addToIngredients(ingredient) {
-      this.ingredients.push(this.ingredient);
+      this.editedRecipe.ingredients
+        ? this.editedRecipe.ingredients.push(this.ingredient)
+        : this.ingredients.push(this.ingredient);
       this.ingredientEntered = "";
     },
+
     ingredientToAdd(ingredient) {
       this.ingredient = ingredient;
       this.ingredientEntered = ingredient;
     },
+
     instructionToAdd(instruction, index) {
       this.instruction = instruction;
       this.instructionEntered = instruction;
     },
+
     addToInstructions(instruction) {
       this.instructions.push(this.ingredient);
-      // this.instructionEntered = "";
     },
   },
 };

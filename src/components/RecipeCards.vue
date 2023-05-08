@@ -23,15 +23,32 @@ export default defineComponent({
     filteredFavourites: Boolean,
     searchTerm: String,
     newRecipe: Object,
+    editedRecipe: Object,
   },
   watch: {
     newRecipe() {
-      if (this.newRecipe !== null) this.recipes.push(this.newRecipe);
+      if (this.newRecipe !== null) {
+        this.newRecipeCopy = this.newRecipe;
+        this.newRecipeCopy.instructions =
+          this.newRecipeCopy.instructions.filter((instruction) => {
+            return instruction !== "";
+          });
+        this.recipes.push(this.newRecipeCopy);
+      }
       this.recipes[this.recipes.length - 1].id = this.recipes.length;
+    },
+    editedRecipe() {
+      const index = this.recipes.findIndex((recipe) => {
+        return recipe.id === this.editedRecipe.id;
+      });
+      if (index !== -1) {
+        this.recipes[index] = this.editedRecipe;
+      }
     },
   },
   data() {
     return {
+      newRecipeCopy: {},
       // a favourite rating of 0 is false, 1 is true
       recipes: [
         {
@@ -332,11 +349,13 @@ export default defineComponent({
         this.recipes[data.recipe.id - 1].favourite = 1;
       }
     },
+
     deleteRecipe(recipeToDelete) {
       this.recipes = this.recipes.filter((recipe) => {
         return recipe.id !== recipeToDelete.id;
       });
     },
+
     editRecipe(recipe) {
       this.$emit("editRecipe", recipe);
     },
