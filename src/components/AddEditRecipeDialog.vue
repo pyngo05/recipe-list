@@ -132,7 +132,7 @@
               'Please press enter after each ingredient input',
           ]"
         >
-          <div v-if="!editedRecipe.ingredients">
+          <div v-if="!editedRecipe.ingredients.length">
             <q-chip
               v-for="(ingredient, index) in ingredients"
               :key="index"
@@ -384,9 +384,15 @@ export default {
     },
 
     removeIngredient(ingredient) {
-      this.ingredients = this.ingredients.filter((item) => {
-        return item !== ingredient;
-      });
+      if (this.ingredients.length) {
+        this.ingredients = this.ingredients.filter(
+          (item) => item !== ingredient
+        );
+      } else {
+        this.editedRecipe.ingredients = this.editedRecipe.ingredients.filter(
+          (item) => item !== ingredient
+        );
+      }
     },
 
     addToIngredients(ingredient) {
