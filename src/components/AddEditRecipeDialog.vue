@@ -132,7 +132,7 @@
               'Please press enter after each ingredient input',
           ]"
         >
-          <div v-if="!editedRecipe.ingredients.length">
+          <div v-if="!editedRecipe.ingredients?.length">
             <q-chip
               v-for="(ingredient, index) in ingredients"
               :key="index"

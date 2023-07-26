@@ -1,12 +1,16 @@
 <template>
-  <div class="q-pl-xl row items-start q-gutter-md justify-center">
-    <div v-for="recipe in filteredRecipes" :key="recipe.id">
-      <recipe-card
-        :recipe="recipe"
-        @favouriteUpdated="updateFavourites"
-        @delete-recipe="deleteRecipe"
-        @edit-recipe="editRecipe"
-      ></recipe-card>
+  <div class="row">
+    <div
+      class="q-pl-xl q-pr-xl row items-start q-gutter-sm justify-start offset-1"
+    >
+      <div v-for="recipe in filteredRecipes" :key="recipe.id">
+        <recipe-card
+          :recipe="recipe"
+          @favouriteUpdated="updateFavourites"
+          @delete-recipe="deleteRecipe"
+          @edit-recipe="editRecipe"
+        ></recipe-card>
+      </div>
     </div>
   </div>
 </template>
