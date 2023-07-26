@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar class="bg-light-green">
-        <q-toolbar-title> Yan's Recipes </q-toolbar-title>
+        <q-toolbar-title class="noEllipsis"> Yan's Recipes </q-toolbar-title>
 
         <q-space />
         <q-toggle
@@ -40,7 +40,6 @@
     <q-page-container>
       <div class="row q-pa-lg">
         <q-btn
-          class="offset-11 col-1"
           color="light-green-8"
           icon="add"
           label="Add Recipe"
@@ -109,4 +108,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.noEllipsis {
+  overflow: visible;
+}
+</style>

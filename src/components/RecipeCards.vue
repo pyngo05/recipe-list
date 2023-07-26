@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pl-xl row items-start q-gutter-md justify-start">
+  <div class="q-pl-xl row items-start q-gutter-md justify-center">
     <div v-for="recipe in filteredRecipes" :key="recipe.id">
       <recipe-card
         :recipe="recipe"
