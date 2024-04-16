@@ -1,6 +1,6 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide" full-width full-height>
-    <q-card class="q-dialog-plugin">
+  <q-dialog ref="dialog" @hide="onDialogHide" full-width>
+    <q-card class="recipe-card">
       <q-card-actions align="right">
         <q-btn
           color="primary"
@@ -50,7 +50,7 @@
           {{ recipe.description }}
         </div>
 
-        <div class="row q-pt-md q-pb-md">
+        <div class="q-pt-md q-pb-md">
           <q-chip dense outline color="primary" icon="restaurant">
             {{ "Serves: " + recipe.servingSize }}
           </q-chip>
@@ -65,19 +65,24 @@
           </q-chip>
         </div>
 
-        <div class="row justify-center">
-          <span class="q-pr-xl col-4 q-pt-md">
+        <div class="q-pt-md">
+          <span class="q-pr-xl">
             {{ "Ingredients:" }}
-            <ul v-for="(ingredient, index) in recipe.ingredients" :key="index">
-              <li>{{ ingredient }}</li>
+            <ul>
+              <li
+                v-for="(ingredient, index) in recipe.ingredients"
+                :key="index"
+              >
+                {{ ingredient }}
+              </li>
             </ul>
           </span>
 
-          <span class="q-pl-xl col-4 q-pt-md">
+          <span class="q-pl-xl">
             {{ "Instructions:" }}
             <ol>
               <li
-                class="q-pb-md"
+                class="q-pb-sm"
                 v-for="(instruction, index) in recipe.instructions"
                 :key="index"
               >
@@ -162,20 +167,20 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .recipe-card {
   width: 100%;
-  max-width: 250px;
-  min-height: 470px;
+  max-width: 100%;
+  min-height: 100vh;
 }
-.rating {
-  background-color: transparent;
-}
+
 .img {
-  width: 596px;
-  height: 400px;
+  width: 100%;
+  height: auto;
   object-fit: cover;
 }
+
 .description {
   font-size: 14px;
 }

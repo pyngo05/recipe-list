@@ -5,13 +5,6 @@
         <q-toolbar-title class="noEllipsis"> Yan's Recipes </q-toolbar-title>
 
         <q-space />
-        <q-toggle
-          color="light-green-8"
-          icon="star"
-          label="Favourites"
-          :model-value="filteredFavourites"
-          @click="filterFavourites()"
-        />
         <q-input
           dark
           dense
@@ -38,13 +31,20 @@
     </q-header>
 
     <q-page-container>
-      <div class="row q-pa-lg">
+      <div class="row q-pa-lg justify-between">
         <q-btn
           color="light-green-8"
           icon="add"
           label="Add Recipe"
           dense
           @click="openAddEditRecipeDialog({})"
+        />
+        <q-toggle
+          color="light-green-8"
+          icon="star"
+          label="Favourites"
+          :model-value="filteredFavourites"
+          @click="filterFavourites()"
         />
       </div>
       <RecipeCards

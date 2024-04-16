@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div
-      class="q-pl-xl q-pr-xl row items-start q-gutter-sm justify-start offset-1"
+      class="q-pl-lg q-pr-xl row items-start q-gutter-sm justify-start offset-1"
     >
       <div v-for="recipe in filteredRecipes" :key="recipe.id">
         <recipe-card
