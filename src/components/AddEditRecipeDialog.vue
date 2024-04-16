@@ -5,7 +5,7 @@
         {{ editedRecipe.name ? "Edit Recipe" : "Add Recipe" }}
       </div>
 
-      <q-form @submit="onOKClick">
+      <q-form @submit="onOKClick" ref="form">
         <q-input
           class="q-mb-md col-12 col-sm-6"
           filled
@@ -214,7 +214,11 @@ export default {
   mounted() {
     if (this.recipe.id) {
       this.editedRecipe = this.recipe;
+      this.editedRecipe.favourite === 1
+        ? (this.editedRecipe.favourite = true)
+        : (this.editedRecipe.favourite = false);
     }
+    console.log("this.editedRecipe", this.editedRecipe);
   },
   methods: {
     show() {
