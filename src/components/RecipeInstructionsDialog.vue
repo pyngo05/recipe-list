@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide" full-width>
-    <q-card class="recipe-card">
+    <q-card class="recipe-card q-pb-xl">
       <q-card-actions align="right">
         <q-btn
           color="primary"
