@@ -2,6 +2,9 @@
   <q-dialog ref="dialog" @hide="onDialogHide" full-width>
     <q-card class="recipe-card q-pb-xl">
       <q-card-actions align="right">
+        <q-btn flat round dense icon="close" @click="onOKClick" />
+      </q-card-actions>
+      <q-card-actions align="center">
         <q-btn
           color="primary"
           label="Edit"
@@ -14,6 +17,7 @@
           @click="onDeleteRecipeClick(recipe)"
         />
       </q-card-actions>
+
       <div class="column items-center q-pa-lg">
         <q-img class="img" :src="recipe.image">
           <q-rating
@@ -91,9 +95,6 @@
             </ol>
           </span>
         </div>
-        <q-card-actions align="right">
-          <q-btn color="primary" label="Close" @click="onOKClick" />
-        </q-card-actions>
       </div>
     </q-card>
   </q-dialog>
